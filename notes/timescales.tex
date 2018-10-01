@@ -1,0 +1,64 @@
+\documentclass[modern]{aastex62}
+
+\usepackage{units}
+
+\input{macros.tex}
+\input{nuclides.tex}
+
+\usepackage{amsmath}
+
+\begin{document}
+
+% \author[0000-0002-4870-8855]{Josiah Schwab}
+% \altaffiliation{Hubble Fellow}
+% \affiliation{Department of Astronomy and Astrophysics, University of California, Santa Cruz, CA 95064, USA}
+% \correspondingauthor{Josiah Schwab}
+% \email{jwschwab@ucsc.edu}
+
+% \title{}
+
+\section{Relevant Timescales}
+
+We define the accretion timescale as
+\begin{equation}
+  t_{\mathrm{accrete}} = \frac{M}{\dot{M}}
+\end{equation}
+and the compression timescale as
+\begin{equation}
+  \label{eq:tcompress}
+  t_{\mathrm{compress}} = \left(\frac{d \ln \rho}{dt} \right)^{-1}~.
+\end{equation}
+The central density rises rapidly as one approaches the Chandrasekhar
+mass and therefore, the compression timescale is significantly shorter
+than the accretion timescale (by a factor $\sim 100$).
+
+
+We define the electron-capture timescale as
+\begin{equation}
+  \label{eq:tcapture}
+  t_{\mathrm{capture}} = \left(\frac{d \ln \Ye}{dt} \right)^{-1}
+\end{equation}
+and the heating timescale as
+\begin{equation}
+  \label{eq:cooling}
+  t_{\mathrm{heat}} = \frac{c_P T}{\epsnuc} ~.
+\end{equation}
+We will primarily be interested in the exothermic electron captures,
+but we will plot the absolute value of this quantity so that it
+represents the cooling timescale at times when the Urca-process is
+operating.
+
+
+For the plots of these timescales in previous work on ECSN
+progenitors, see Figure 7 in \citet{Miyaji1980}, Figure 2 in
+\citet{Miyaji1987}, and Figure 9 in \citet{Takahashi2013}.
+
+
+\bibliography{timescales.bib}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
