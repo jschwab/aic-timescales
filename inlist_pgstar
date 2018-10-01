@@ -1,7 +1,7 @@
 &pgstar
   pause = .false.
 
-  Grid1_win_flag = .true.
+  Grid1_win_flag = .false.
 
   Grid1_win_width = 12
   Grid1_win_aspect_ratio = 0.75 ! aspect_ratio = height/width
@@ -108,11 +108,11 @@
 
 
   ! file output
-  Grid1_file_flag = .false.
+  Grid1_file_flag = .true.
   Grid1_file_dir = 'png'
   Grid1_file_prefix = 'grid1'
   Grid1_file_interval = 5 ! output when mod(model_number,Grid1_file_interval)==0
-  Grid1_file_width = 9 ! negative means use same value as for window
+  Grid1_file_width = 18 ! negative means use same value as for window
   Grid1_file_aspect_ratio = -1 ! negative means use same value as for window
 
 
