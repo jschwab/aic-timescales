@@ -1,0 +1,20 @@
+
+&star_job
+  pgstar_flag = .true.
+
+  load_saved_model = .true.
+  saved_model_name = 'models/final_SQB15.mod'
+
+/ ! end of star_job namelist
+
+&controls
+  terminal_interval = 100
+
+  history_interval = 1
+  write_profiles_flag = .false.
+
+/ ! end of controls namelist
+
+&pgstar
+
+/ ! end of pgstar namelist
