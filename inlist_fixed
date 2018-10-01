@@ -1,0 +1,62 @@
+&star_job
+
+  set_tau_factor = .true.
+  set_to_this_tau_factor = 300
+
+  set_initial_age = .true.
+  initial_age = 0 ! in years
+
+  set_initial_model_number = .true.
+  initial_model_number = 0
+
+  change_net = .true.
+  new_net_name = 'weak.net'
+
+  use_special_weak_rates = .true.
+  ion_coulomb_corrections = 'PCR2009'
+  electron_coulomb_corrections = 'Itoh2002'
+  special_weak_states_file = 'weak.states'
+  special_weak_transitions_file = 'weak.transitions'
+
+  ! include all isos in PC.  if you don't do this, you can
+  ! have convergence problems when the weak equilibrium shifts.
+  set_eos_PC_parameters = .true.
+  mass_fraction_limit_for_PC = 0d0
+
+  ! move eos blend so the core is always on PC
+  log_Gamma_all_HELM = 0.60206d0 ! Gamma = 4
+  log_Gamma_all_PC = 0.90309d0 ! Gamma = 8
+
+  pgstar_flag = .true.
+
+/ !End of star_job namelist
+
+
+&controls
+
+  ! important for C/O enhanced material
+  use_Type2_opacities = .true.
+  Zbase = 0.02
+
+  use_Ledoux_criterion = .true.
+  alpha_semiconvection = 0.0
+
+  accrete_same_as_surface = .true.
+  mass_change = 1e-6
+
+  ! default resolution controls
+  varcontrol_target = 1e-3
+  mesh_delta_coeff = 1.0
+
+  ! limit the rate of change of the core density
+  delta_lgRho_cntr_hard_limit = 3e-3
+  delta_lgRho_cntr_limit = 1e-3
+
+  ! resolve small central length scales
+  max_center_cell_dq = 1d-12
+  center_avg_value_dq = 3d-12
+  use_other_mesh_functions = .true.
+  x_logical_ctrl(1) = .true.
+  x_ctrl(1) = 30 ! # of zones per decade in radius
+
+/ ! end of controls namelist

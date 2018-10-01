@@ -1,0 +1,36 @@
+      include 'co_burn.net'
+
+      add_isos(
+         o20 
+         f20
+         f23
+         ne22
+         ne23
+         na23
+         ne24
+         na24
+         na25
+         mg25
+         )
+
+      ! reactions used in SQB
+      add_reactions(
+          r_ne20_wk_f20
+          r_f20_wk-minus_ne20,
+          r_f20_wk_o20,
+          r_o20_wk-minus_f20,
+          r_mg24_wk_na24
+          r_na24_wk-minus_mg24
+          r_na24_wk_ne24,
+          r_ne24_wk-minus_na24
+         )
+
+      ! Urca process reactions
+      add_reactions(
+               r_na23_wk_ne23
+               r_ne23_wk-minus_na23
+               r_ne23_wk_f23
+               r_f23_wk-minus_ne23
+               r_mg25_wk_na25
+               r_na25_wk-minus_mg25
+      )
