@@ -2,3 +2,5 @@ SQB15-allowed inlist_io_SQB15 inlist_mlt_none weak.transitions
 SBQ17-allowed inlist_io_SQB15+ inlist_mlt_none weak.transitions
 SQB15-nusf11 inlist_io_SQB15 inlist_mlt_none weak-logft-11.transitions
 SBQ17-nusf11 inlist_io_SQB15+ inlist_mlt_none  weak-logft-11.transitions
+SQB15-suzuki inlist_io_SQB15 inlist_mlt_none_and_suzuki weak.transitions
+SBQ17-suzuki inlist_io_SQB15+ inlist_mlt_none_and_suzuki weak.transitions
