@@ -29,7 +29,7 @@ and the compression timescale as
   t_{\mathrm{compress}} = \left(\frac{d \ln \rho}{dt} \right)^{-1}~.
 \end{equation}
 The central density rises rapidly as one approaches the Chandrasekhar
-mass and therefore, the compression timescale is significantly shorter
+mass and therefore the compression timescale is significantly shorter
 than the accretion timescale (by a factor $\sim 100$).
 
 
@@ -53,8 +53,83 @@ For the plots of these timescales in previous work on ECSN
 progenitors, see Figure 7 in \citet{Miyaji1980}, Figure 2 in
 \citet{Miyaji1987}, and Figure 9 in \citet{Takahashi2013}.
 
+The figures show these timescales for for an ONe WD accreting at
+$\dot{M} = 10^{-6}\,\Msunyr$.  Two WD models are shown: SQB15 is the
+fiducial model used in \citet{Schwab2015}, which has only even-A
+isotopes (\oxygen[16], \neon[20], \magnesium[24]); SBQ17 is the
+fiducial model used in \citet{Schwab2017a}, which also includes the
+odd-A isotopes \sodium[23] and \magnesium[25] and experiences
+significant Urca-process cooling.  Table 1 gives the detailed
+compositions.  We show a run using the ``on-the-fly'' rates in \MESA\
+assuming only allowed transitions contribute and another run assuming
+the non-unique second forbidden transitions have
+$\log(ft) \approx 11$.  We also show the results of using the
+\citet{Suzuki2016a} tables.  In these tables, the relevant non-unique
+second forbidden transition for \neon[20] is at the (previous)
+experimental upper limit.
+
+The models in Figure 3 all want to convect around the time of the
+$A=24$ electron captures, but in these runs we have artificially
+suppressed convection.  (Once the models become convective in this
+regime, \MESA\ struggles for a variety of reasons.)
+
+The \MESA\ models all halt at oxygen ignition.  The heating/capture
+timescales will naturally continue to decrease beyond this point.
+
+
+\begin{table}
+  \centering
+  \caption{The set of compositions used in our \MESA\ models.  Each
+    composition is referenced in the text by the identifier listed in
+    the top row.  Each column lists the mass fractions of the isotopes
+    (listed at left) that were included.  Dashes indicate that a
+    particular isotope was not included.}
+  \label{tab:compositions}
+  \begin{tabular}{rcc}
+    \hline
+    Isotope & SQB15 & SBQ17 \\
+    \hline
+    \oxygen[16]    & 0.500 & 0.500 \\
+    \neon[20]      & 0.450 & 0.390 \\
+    \neon[22]      & ---   & ---   \\
+    \sodium[23]    & ---   & 0.050 \\
+    \magnesium[24] & 0.050 & 0.050 \\
+    \magnesium[25] & ---   & 0.010 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{schematic.pdf}
+  \caption{Central density-temperature evolution for of the accreting
+    WD models with the effects of various reactions labeled. (This is
+    Figure 5 in \citealt{Schwab2017a}.)}
+\end{figure}
+
 
 \bibliography{timescales.bib}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{SQB15-allowed.pdf}
+  \includegraphics[width=\textwidth]{SQB15-nusf11.pdf}
+    \includegraphics[width=\textwidth]{SQB15-suzuki.pdf}
+  \caption{Evolution without Urca-process cooling (SQB15 model).  \textit{Upper panel}: On-the-fly rates with allowed transitions only;  \textit{Middle panel}: On-the-fly rates including non-unique second forbidden transitions; \textit{Lower panel}: \citet{Suzuki2016a} rate tables.}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{SBQ17-allowed.pdf}
+  \includegraphics[width=\textwidth]{SBQ17-nusf11.pdf}
+  \includegraphics[width=\textwidth]{SBQ17-suzuki.pdf}
+  \caption{Evolution with Urca-process cooling (SBQ17 model). \textit{Upper panel}: On-the-fly rates with allowed transitions only;  \textit{Middle panel}: On-the-fly rates including non-unique second forbidden transitions; \textit{Lower panel}: \citet{Suzuki2016a} rate tables.}
+\end{figure}
+
+
+
+
+
 
 \end{document}
 
