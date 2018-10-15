@@ -632,14 +632,14 @@
 
    
    ! info at location of max temperature
-      !max_T_lgT
-      !max_T_mass ! (Msun)
-      !max_T_radius ! (Rsun)
-      !max_T_lgRho
-      !max_T_lgP
-      !max_T_entropy
-      !max_T_L ! (Lsun)
-      !max_T_eps_nuc ! (erg/g/s)
+      max_T_lgT
+      max_T_mass ! (Msun)
+      max_T_radius ! (Rsun)
+      max_T_lgRho
+      max_T_lgP
+      max_T_entropy
+      max_T_L ! (Lsun)
+      max_T_eps_nuc ! (erg/g/s)
       !max_T_lgP_thin_shell ! log10(G*Mcore*Menv/(4*pi*Rcore^4))
          ! Mcore = Msun*max_T_mass,
          ! Menv = Msun*(star_mass - max_T_mass),
