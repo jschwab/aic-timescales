@@ -192,16 +192,18 @@ contains
     endif
 
     ! terminate at oxygen runaway
-    k = s% max_eps_nuc_k
-    orunaway = s% eps_nuc_categories(ioo,k) - s% non_nuc_neu(k)
+    if (s% x_logical_ctrl(4)) then
+       k = s% max_eps_nuc_k
+       orunaway = s% eps_nuc_categories(ioo,k) - s% non_nuc_neu(k)
 
-    if ((orunaway .gt. 0) .and. (s%T(k) .gt. 8e8)) then
-       extras_check_model = terminate
-       s% termination_code = t_xtra2
-       termination_code_str(t_xtra2) = 'O+O runaway'
-       return
+       if ((orunaway .gt. 0) .and. (s%T(k) .gt. 8e8)) then
+          extras_check_model = terminate
+          s% termination_code = t_xtra2
+          termination_code_str(t_xtra2) = 'O+O runaway'
+          return
+       end if
+
     end if
-
 
     ! if you want to check multiple conditions, it can be useful
     ! to set a different termination code depending on which

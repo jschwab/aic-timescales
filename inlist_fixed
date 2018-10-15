@@ -59,4 +59,7 @@
   x_logical_ctrl(1) = .true.
   x_ctrl(1) = 30 ! # of zones per decade in radius
 
+  ! stop at oxygen ignition
+  x_logical_ctrl(4) = .true.
+
 / ! end of controls namelist
