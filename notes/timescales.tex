@@ -107,28 +107,192 @@ timescales will naturally continue to decrease beyond this point.
     Figure 5 in \citealt{Schwab2017a}.)}
 \end{figure}
 
+\begin{figure}
+  \centering
+  \includegraphics[width=0.95\textwidth]{SQB15-allowed.pdf}
+  \includegraphics[width=0.95\textwidth]{SQB15-nusf11.pdf}
+  \includegraphics[width=0.95\textwidth]{SQB15-suzuki.pdf}
+
+  \caption{Evolution without Urca-process cooling (SQB15 model).  \textit{Upper panel}: On-the-fly rates with allowed transitions only;  \textit{Middle panel}: On-the-fly rates including non-unique second forbidden transitions; \textit{Lower panel}: \citet{Suzuki2016a} rate tables. \label{fig:SQB15}}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.95\textwidth]{SBQ17-allowed.pdf}
+  \includegraphics[width=0.95\textwidth]{SBQ17-nusf11.pdf}
+  \includegraphics[width=0.95\textwidth]{SBQ17-suzuki.pdf}
+  \caption{Evolution with Urca-process cooling (SBQ17 model). \textit{Upper panel}: On-the-fly rates with allowed transitions only;  \textit{Middle panel}: On-the-fly rates including non-unique second forbidden transitions; \textit{Lower panel}: \citet{Suzuki2016a} rate tables. \label{fig:SBQ17}}
+\end{figure}
+
+\newpage
+~
+\newpage
+
+\section{Evolution to Oxygen Ignition}
+
+We decided (at least initially) to focus on oxygen ignition.  We will
+use the \citet{Suzuki2016a} rate tables and thus operate under the
+assumption that the strength of the non-unique second forbidden
+transition of $\neon[20] \to \fluorine[20]$ is around the value
+adopted therein.  As mentioned by \citet{Schwab2015}, and discussed in
+somewhat more detail by \citet{Moller2017}, the inclusion of this
+transition leads to off-center oxygen ignition.  (In contrast, models
+that omit this transition, or assume its strength is far below the
+experimental upper limit, show central ignitions.)  This may be
+important in understanding the subsequent evolution and final outcome.
+
+
+As is pointed out by \citet{Moller2017}, including the forbidden
+transition also significantly changes the elapsed time between the
+onset of \neon[20] captures and the beginning of oxygen burning.  For
+example, the model in the upper panel of Figure~\ref{fig:SQB15}
+(allowed transitions only) takes about $\sim \unit[1]{yr}$ versus the
+model in the lower panel \citep[tables from][]{Suzuki2016a} which
+takes $\sim \unit[100]{yr}$\footnote{\citet{Moller2017} quotes
+  timescales of a few years and a few days respectively.  We're
+  probably just measuring differently; at any rate, the ratio is about
+  the same.}.  It's not clear that's of importance for the evolution
+-- though it does allow more time for oscillatory double diffusive
+convection to operate -- but for our hydrodynamics calculations, it
+just means that we really can't start near the onset of neon captures.
+
+
+To understand the evolution towards an off-center ignition in more
+detail, and since the goal is to provide simple initial conditions for
+hydrodynamics calculations, we evolve a pure oxygen-neon WD model.
+Fiducially, we select mass fractions 60\% \oxygen[16] and 40\%
+\neon[20], but we will demonstrate the effect of varying the \neon[20]
+fraction.  Figure~\ref{fig:ONe6040} shows the evolution of the
+fiducial model.  The left plot shows the evolution of the center and
+the location of the maximum rate of nuclear energy release in the
+$T-\rho$ plane.  In the right plot, the upper panel shows a series of
+temperature profiles. The line colors match the dots in the left plot;
+one can see the evolution as the hot spot moves off center.  The final
+off-center ignition at $r \approx \unit[70]{km}$ is evident in the
+sharply peaked teal line.\footnote{This is in agreement with the
+  models of \citet{Moller2017}, which found ignitions
+  $\approx \unit[50]{km}$ off center.}  The lower panel shows the
+\neon[20] profiles.  Note that the model experiences nearly-complete
+neon depletion by the time of ignition.  This is in contrast to the
+calculation excluding the forbidden transition, where only
+$\approx 10\%$ of the \neon[20] is consumed \citep[see Figure 5
+in][]{Schwab2015}.  This means the central
+$M \sim \unit[5 \times 10^{-3}]{\Msun}$ is almost pure \oxygen[16] and
+\oxygen[20] with a low $\Ye \approx 0.46$.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.49\textwidth]{ONe6040-RhoT.pdf}
+  \includegraphics[width=0.49\textwidth]{ONe6040-profiles.pdf}
+  \caption{Evolution of fiducial pure ONe WD model.  \textit{Left
+      panel}: Temperature-density evolution.  The solid line shows the
+    central $T$ and $\rho$; the dotted line shows the $T$ and $\rho$
+    at the location of the maximum rate of nuclear energy release.
+    The separation indicates the WD is evolving towards off-center
+    ignition.  \textit{Right panel}: Profiles (as a function of
+    radius) of the temperature (upper plot) and \neon[20] mass
+    fraction (lower plot).  The matching colored dot in the left panel
+    indicates the conditions at the time of each profile.}
+  \label{fig:ONe6040}
+\end{figure}
+
+
+We now provide a more complete description of how and why this
+off-center ignition occurs.  At first, the \neon[20] thermal runaway
+proceeds quite similarly, except for the fact that it begins at the
+lower threshold density associated with the forbidden transition
+$\logRho \approx 9.8$, versus the $\logRho \approx 9.95$ threshold
+density for the allowed transition.  While the conditions are
+sub-threshold, the rate increases exponentially with temperature and
+density.  However, near threshold, this becomes a much more gentle,
+power-law rise.  Thus, in conditions where the forbidden transition
+dominates, but before the allowed transition kicks in around its
+threshold density, the electron capture rate tops out around
+$\lambda_{\rm ec} \sim \unit[10^{-8}]{s}$ \citep[see Figure 1 in
+][]{MartinezPinedo2014}.
+
+
+This implies that the rate of nuclear energy release from the
+\neon[20] electron captures no longer rises rapidly with temperature.
+In turn, because thermal neutrino losses do rise rapidly with
+increasing temperature, there exists is a temperature where heating
+from electron captures and cooling from thermal neutrino losses can
+balance.  Because of the relatively slow electron capture rate, this
+temperature is \textit{below} the temperature at which oxygen burns.
+As a result, the runaway halts, and the center of the star moves into
+a phase where it satisfies a balanced-power condition
+$\epsnuc \approx \epsnu$.  The fact that the center can achieve this
+balance then precludes a central ignition.\footnote{In support of this
+  point, we turn off thermal neutrino losses in \MESA\ and confirm
+  that doing so does lead to a central ignition.}
+
+% add something about why it is off-center
+
+Figure~\ref{fig:ONe-vary} shows the results of a set of calculations
+varying the \neon[20] mass fraction.  The left panel shows the
+$T-\rho$ evolution, as in Figure~\ref{fig:ONe6040}.  The central
+temperature evolution is notably different in the three cases, but the
+evolution at the location of the peak of $\epsnuc$ is not.  The right
+panel shows the logarithm of the ratio of $\epsnuc$ to $\epsnu$ at the
+center of the WD.  Note that after the initial runaway, this has a
+value $\approx 0$, demonstrating our earlier assertion that nuclear
+energy generation and thermal neutrino losses are balanced.  The
+$X_{\rm Ne} = 0.3$ case deviates from this balance near the end, after
+it exhausts its \neon[20].
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.49\textwidth]{ONe-RhoT.pdf}
+  \includegraphics[width=0.49\textwidth]{ONe-epsratio.pdf}
+  \caption{Comparison of models with varying \neon[20] fractions.
+    \textit{Left Panel}: Temperature-density evolution.  As in
+    Figure~\ref{fig:ONe6040}, the solid line shows the central $T$ and
+    $\rho$; the dotted line shows the $T$ and $\rho$ at the location
+    of the maximum rate of nuclear energy release.  \textit{Right
+      Panel}: Ratio of the nuclear energy generation rate to the
+    thermal neutrino cooling rate, evaluated at the center of the WD.}
+  \label{fig:ONe-vary}
+\end{figure}
+
+
+The fact that the $T-\rho$ evolution at the location that runs away is
+roughly independent of the \neon[20] fraction (left panel of
+Figure~\ref{fig:ONe-vary}) fits into this picture.  In particular, the
+location that runs away is the first place that is able to get
+electron captures that can go fast enough to overcome the neutrino
+losses around the oxygen ignition temperature.  Since the runaway
+doesn't complete in the center, that does mean that some extra heat is
+conducted into the surrounding layers.  But I'm not sure that helps
+much; it doesn't matter if you get hotter if you then radiate it away
+via neutrinos.  Instead, I think the most important thing is that the
+layers surrounding the center get denser as the center \Ye\ falls and
+it contracts.  Once this material gets a bit closer to the threshold
+density for the allowed transition, when it gets hot, the allowed
+transition can begin to dominate the rate \citep[again, see Figure 1
+in ][]{MartinezPinedo2014}.  If that's the right picture, then I think
+that predicts that higher \neon[20] fractions (which can evolve to
+lower $\Ye$), should experience ignition less off-center.
+Table~\ref{tab:ONe-ignition} appears to indicate that is the case.
+
+\begin{table}
+  \centering
+  \caption{Location of ignition as a function of \neon[20] mass
+    fraction.}
+  \label{tab:ONe-ignition}
+  \begin{tabular}{cc}
+    \hline
+    $X_{\rm Ne}$ & Ignition \\
+     & [km] \\
+    \hline
+    0.3 & 85 \\
+    0.4 & 73\\
+    0.5 & 65 \\
+    \hline
+  \end{tabular}
+\end{table}
+
 
 \bibliography{timescales.bib}
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\textwidth]{SQB15-allowed.pdf}
-  \includegraphics[width=\textwidth]{SQB15-nusf11.pdf}
-    \includegraphics[width=\textwidth]{SQB15-suzuki.pdf}
-  \caption{Evolution without Urca-process cooling (SQB15 model).  \textit{Upper panel}: On-the-fly rates with allowed transitions only;  \textit{Middle panel}: On-the-fly rates including non-unique second forbidden transitions; \textit{Lower panel}: \citet{Suzuki2016a} rate tables.}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\textwidth]{SBQ17-allowed.pdf}
-  \includegraphics[width=\textwidth]{SBQ17-nusf11.pdf}
-  \includegraphics[width=\textwidth]{SBQ17-suzuki.pdf}
-  \caption{Evolution with Urca-process cooling (SBQ17 model). \textit{Upper panel}: On-the-fly rates with allowed transitions only;  \textit{Middle panel}: On-the-fly rates including non-unique second forbidden transitions; \textit{Lower panel}: \citet{Suzuki2016a} rate tables.}
-\end{figure}
-
-
-
-
 
 
 \end{document}
