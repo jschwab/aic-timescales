@@ -23,10 +23,12 @@
   x_integer_ctrl(1) = 100
   max_num_profile_models = 300
 
+  ! stop at oxygen ignition
+  x_logical_ctrl(4) = .true.
+
   ! continue past oxygen ignition
-  x_logical_ctrl(4) = .false.
-  !x_logical_ctrl(4) = .true.
-  !max_model_number = 1300
+  ! x_logical_ctrl(4) = .false.
+  ! max_model_number = 1300
 
 / ! end of controls namelist
 
