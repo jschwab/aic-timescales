@@ -312,7 +312,7 @@ contains
        vals(k,1) = (s% nz + 1) - k
     end do
 
-    names(1) = 'eps_nuc_mc2'
+    names(2) = 'eps_nuc_mc2'
 
     vals(:,2) = 0
     do k=1, nz
