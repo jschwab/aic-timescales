@@ -276,23 +276,29 @@ contains
     ierr = 0
     call star_ptr(id, s, ierr)
     if (ierr /= 0) return
-    how_many_extra_profile_columns = 1
+    how_many_extra_profile_columns = 6
   end function how_many_extra_profile_columns
 
 
   subroutine data_for_extra_profile_columns(id, id_extra, n, nz, names, vals, ierr)
+    use chem_def
+    use eos_def
+    use eos_lib
+    use net_lib, only: net_work_size
     use star_def, only: star_info, maxlen_profile_column_name
-    use const_def, only: dp
-    use chem_def, only: ina24, ine24
     integer, intent(in) :: id, id_extra, n, nz
     character (len=maxlen_profile_column_name) :: names(n)
     real(dp) :: vals(nz,n)
     integer, intent(out) :: ierr
     type (star_info), pointer :: s
-    integer :: j, k
+    integer :: i, j, k, ci, op_err, net_lwork
+    logical :: okay
+
     ierr = 0
     call star_ptr(id, s, ierr)
     if (ierr /= 0) return
+
+    net_lwork = net_work_size(s% net_handle, ierr)
 
     !note: do NOT add the extra names to profile_columns.list
     ! the profile_columns.list is only for the built-in profile column options.
@@ -306,9 +312,218 @@ contains
        vals(k,1) = (s% nz + 1) - k
     end do
 
+    names(1) = 'eps_nuc_mc2'
+
+    vals(:,2) = 0
+    do k=1, nz
+       do i=1, s% species
+          ci = s% chem_id(i)
+          ! dxdt(i) = chem_isos% Z_plus_N(ci)*dydt(i_rate, i)
+          vals(k,2) = vals(k,2) - chem_isos% mass_excess(ci)*s% dxdt_nuc(i,k)/chem_isos% Z_plus_N(ci)
+       end do
+    end do
+
+    vals(:,2) = vals(:,2) * Qconv
+
+    ! use reported neu value
+    names(3) = 'eps_nuc_neu'
+    vals(1:nz,3) = s% eps_nuc_neu_total(1:nz)
+
+
+    ! calculate eps_eos as a remainder
+    names(4) = 'eps_nuc_eos'
+    do k=1, nz
+       vals(k,4) = s% eps_nuc(k) - (vals(k,2) - vals(k,3))
+    end do
+
+    names(5) = 'log_rate_r_n20_wk_f20'
+    names(6) = 'log_rate_r1616'
+
+    !$OMP PARALLEL DO PRIVATE(k,op_err) 
+         do k = 1, s% nz
+            if (.not. okay) cycle
+            op_err = 0
+            call do1_net( &
+               s, k, s% species, &
+               s% num_reactions, net_lwork, &
+               n, nz, vals, op_err)
+            if (op_err /= 0) okay = .false.
+         end do
+!$OMP END PARALLEL DO        
+
 
   end subroutine data_for_extra_profile_columns
 
+
+  subroutine do1_net( &
+       s, k, species, num_reactions, net_lwork, &
+       n, nz, vals, ierr)
+    use rates_def, only: std_reaction_Qs, std_reaction_neuQs, i_rate
+    use net_def, only: Net_Info
+    use net_lib, only: net_get
+    use chem_def, only: chem_isos, category_name
+    use eos_def, only : i_eta
+    use utils_lib,only: &
+         is_bad_num, realloc_double, realloc_double3
+    type (star_info), pointer :: s         
+    integer, intent(in) :: k, species, num_reactions, net_lwork, n, nz
+    real(dp) :: vals(nz,n)
+    integer, intent(out) :: ierr
+
+    integer :: i, j, screening_mode
+    real(dp) :: log10_rho, log10_T, alfa, beta, &
+         d_eps_nuc_dRho, d_eps_nuc_dT, cat_factor
+    real(dp), target :: net_work_ary(net_lwork)
+    real(dp), pointer :: net_work(:)
+    type (Net_Info), target :: net_info_target
+    type (Net_Info), pointer :: netinfo
+
+    character (len=100) :: message
+    real(dp), pointer :: reaction_neuQs(:)
+    integer :: sz
+    real(dp) :: eps_nuc_factor
+
+    logical, parameter :: dbg = .false.
+
+    include 'formats'
+
+    ierr = 0
+
+    net_work => net_work_ary
+    netinfo => net_info_target
+
+    log10_rho = s% lnd(k)/ln10
+    log10_T = s% lnT(k)/ln10
+
+    screening_mode = get_screening_mode(s,ierr)         
+    if (ierr /= 0) then
+       write(*,*) 'unknown string for screening_mode: ' // trim(s% screening_mode)
+       stop 'do1_net'
+       return
+    end if
+
+    call net_get( &
+         s% net_handle, .false., netinfo, species, num_reactions, s% xa(1:species,k), &
+         s% T(k), log10_T, s% rho(k), log10_Rho, &
+         s% abar(k), s% zbar(k), s% z2bar(k), s% ye(k), &
+         s% eta(k), s% d_eos_dlnd(i_eta,k), s% d_eos_dlnT(i_eta,k), &
+         s% rate_factors, s% weak_rate_factor, &
+         std_reaction_Qs, std_reaction_neuQs, .false., .false., &
+         s% eps_nuc(k), d_eps_nuc_dRho, d_eps_nuc_dT, s% d_epsnuc_dx(:,k), & 
+         s% dxdt_nuc(:,k), s% dxdt_dRho(:,k), s% dxdt_dT(:,k), s% d_dxdt_dx(:,:,k), &
+         screening_mode, s% theta_e(k), &
+         s% eps_nuc_categories(:,k), &
+         s% eps_nuc_neu_total(k), net_lwork, net_work, ierr)
+
+    if (ierr /= 0) then
+       write(*,*) 'do1_net: net_get failure for cell ', k
+       return
+    end if
+
+    call show_stuff(s,k,net_lwork,net_work,n,nz,vals)
+
+  end subroutine do1_net
+
+
+  integer function get_screening_mode(s,ierr)
+    use rates_lib, only: screening_option
+    type (star_info), pointer :: s 
+    integer, intent(out) :: ierr
+    include 'formats'
+    ierr = 0
+    if (s% screening_mode_value >= 0) then
+       get_screening_mode = s% screening_mode_value
+       return
+    end if
+    get_screening_mode = screening_option(s% screening_mode, ierr)
+    if (ierr /= 0) return
+    s% screening_mode_value = get_screening_mode
+    !write(*,2) 'get_screening_mode ' // &
+    !   trim(s% screening_mode), get_screening_mode
+  end function get_screening_mode
+
+
+
+  subroutine show_stuff(s,k,lwork,work,n,nz,vals)
+    use chem_def
+    use rates_def
+    use rates_lib, only: rates_reaction_id
+    use net_lib, only: get_reaction_id_table_ptr, get_net_rate_ptrs
+    use crlibm_lib, only: log10_cr
+    type (star_info), pointer :: s         
+    integer, intent(in) :: k, lwork, n, nz
+    real(dp), pointer :: work(:)
+    real(dp) :: vals(nz,n)
+
+    integer, pointer :: reaction_id(:) ! maps net reaction number to reaction id
+    integer :: i, j, ierr, species, num_reactions, rate_id
+    real(dp), pointer, dimension(:) :: &
+         rate_screened, rate_screened_dT, rate_screened_dRho, &
+         rate_raw, rate_raw_dT, rate_raw_dRho
+
+    include 'formats'
+
+    ierr = 0
+    num_reactions = s% num_reactions
+
+    call get_net_rate_ptrs(s% net_handle, &
+         rate_screened, rate_screened_dT, rate_screened_dRho, &
+         rate_raw, rate_raw_dT, rate_raw_dRho, lwork, work, &
+         ierr)
+    if (ierr /= 0) then
+       write(*,*) 'failed in get_net_rate_ptrs'
+       stop 1
+    end if
+
+    call get_reaction_id_table_ptr(s% net_handle, reaction_id, ierr) 
+    if (ierr /= 0) return
+
+    rate_id = rates_reaction_id('r_ne20_wk_f20')
+    if (rate_id <= 0) then
+       write(*,*) 'failed to find reaction rate id -- not valid name?'
+       vals(k,5) = 0
+       return
+    end if
+    vals(k,5) = get_rate(rate_id)
+
+    rate_id = rates_reaction_id('r_1616')
+    if (rate_id <= 0) then
+       write(*,*) 'failed to find reaction rate id -- not valid name?'
+       vals(k,6) = 0
+       return
+    end if
+    vals(k,6) = get_rate(rate_id)
+
+
+  contains
+
+    real(dp) function get_rate(id)
+      integer, intent(in) :: id
+      integer :: j
+      include 'formats'
+
+      get_rate = -99
+      do j=1,num_reactions
+         if (reaction_id(j) /= rate_id) cycle
+         !write(*,3) 'screened rate ' // trim(reaction_Name(reaction_id(j))), &
+         !   j, k, rate_screened(j)
+         if (rate_screened(j) < 1d-20) then
+            get_rate = -99
+         else
+            get_rate = log10_cr(rate_screened(j)) ! or rate_raw(j)
+         end if
+         return
+      end do
+
+      write(*,*) 'failed to find reaction rate id -- not in current net?'
+      get_rate = -99
+
+    end function get_rate
+
+  end subroutine show_stuff
+
+
+  
   subroutine how_many_extra_history_header_items(id, id_extra, num_cols)
     integer, intent(in) :: id, id_extra
     integer, intent(out) :: num_cols
