@@ -487,7 +487,7 @@ contains
     end if
     vals(k,5) = get_rate(rate_id)
 
-    rate_id = rates_reaction_id('r_1616')
+    rate_id = rates_reaction_id('r1616')
     if (rate_id <= 0) then
        write(*,*) 'failed to find reaction rate id -- not valid name?'
        vals(k,6) = 0
