@@ -339,16 +339,17 @@ contains
     names(5) = 'log_rate_r_n20_wk_f20'
     names(6) = 'log_rate_r1616'
 
-    !$OMP PARALLEL DO PRIVATE(k,op_err) 
-         do k = 1, s% nz
-            if (.not. okay) cycle
-            op_err = 0
-            call do1_net( &
-               s, k, s% species, &
-               s% num_reactions, net_lwork, &
-               n, nz, vals, op_err)
-            if (op_err /= 0) okay = .false.
-         end do
+    okay = .true.
+!$OMP PARALLEL DO PRIVATE(k,op_err) 
+    do k = 1, s% nz
+       if (.not. okay) cycle
+       op_err = 0
+       call do1_net( &
+            s, k, s% species, &
+            s% num_reactions, net_lwork, &
+            n, nz, vals, op_err)
+       if (op_err /= 0) okay = .false.
+    end do
 !$OMP END PARALLEL DO        
 
 
