@@ -9,6 +9,10 @@
   file_for_uniform_xa = 'models/uniform-O0.6-Ne0.4.dat'
   set_uniform_initial_xa_from_file = .true.
 
+  write_profile_when_terminate = .true.
+  filename_for_profile_when_terminate = 'LOGS/ONe6040-oign.data'
+  !filename_for_profile_when_terminate = 'LOGS/ONe6040-final.data'
+
 / ! end of star_job namelist
 
 &controls
@@ -21,6 +25,8 @@
 
   ! continue past oxygen ignition
   x_logical_ctrl(4) = .false.
+  !x_logical_ctrl(4) = .true.
+  !max_model_number = 1300
 
 / ! end of controls namelist
 
