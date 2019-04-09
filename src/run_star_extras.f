@@ -276,7 +276,7 @@ contains
     ierr = 0
     call star_ptr(id, s, ierr)
     if (ierr /= 0) return
-    how_many_extra_profile_columns = 6
+    how_many_extra_profile_columns = 8
   end function how_many_extra_profile_columns
 
 
@@ -352,6 +352,12 @@ contains
     end do
 !$OMP END PARALLEL DO        
 
+    names(7) = 'dabardt'
+    names(8) = 'dzbardt'
+    do k = 1, nz
+       vals(k, 7) = (s% abar(k) - s% abar_start(k)) / s% dt
+       vals(k, 8) = (s% zbar(k) - s% zbar_start(k)) / s% dt
+    end do
 
   end subroutine data_for_extra_profile_columns
 
